@@ -16,7 +16,7 @@ var Dictionary = {
   inited: false,
   initial: function(opts){
     this.inited = true;
-    this.ExtraDictConfig = opts.Config || ExtraDictConfig;
+    this.ExtraDictConfig = opts.ExtraDictConfig || ExtraDictConfig;
 
     if (!this.ExtraDictConfig.ext_dict) { this.ExtraDictConfig.ext_dict = ExtraDictConfig.ext_dict;}
     if (!this.ExtraDictConfig.ext_stopwords) { this.ExtraDictConfig.ext_stopwords = ExtraDictConfig.ext_stopwords;}
