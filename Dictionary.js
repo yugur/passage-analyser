@@ -1,34 +1,34 @@
 var fs = require('fs'),
-    config = require('./config'),
+    ExtraDictConfig = require('./ExtraDictConfig'),
     Hit = require('./Hit'),
     HitService = require('./HitService');
-    
+
 var DictSegment = require('./DictSegment');
 
 var PATH_DIC_MAIN      = __dirname + "/dict/main.dic",
-   PATH_DIC_SURNAME    = __dirname + "/dict/surname.dic",
-   PATH_DIC_QUANTIFIER = __dirname + "/dict/quantifier.dic",
-   PATH_DIC_SUFFIX     = __dirname + "/dict/suffix.dic",
-   PATH_DIC_PREP       = __dirname + "/dict/preposition.dic",
-   PATH_DIC_STOP       = __dirname + "/dict/stopword.dic";
+    PATH_DIC_SURNAME    = __dirname + "/dict/surname.dic",
+    PATH_DIC_QUANTIFIER = __dirname + "/dict/quantifier.dic",
+    PATH_DIC_SUFFIX     = __dirname + "/dict/suffix.dic",
+    PATH_DIC_PREP       = __dirname + "/dict/preposition.dic",
+    PATH_DIC_STOP       = __dirname + "/dict/stopword.dic";
 
 var Dictionary = {
   inited: false,
   initial: function(opts){
     this.inited = true;
-    this.config = opts.Config || config;
-    
-    if (!this.config.ext_dict) { this.config.ext_dict = config.ext_dict;}
-    if (!this.config.ext_stopwords) { this.config.ext_stopwords = config.ext_stopwords;}
-    
+    this.ExtraDictConfig = opts.Config || ExtraDictConfig;
+
+    if (!this.ExtraDictConfig.ext_dict) { this.ExtraDictConfig.ext_dict = ExtraDictConfig.ext_dict;}
+    if (!this.ExtraDictConfig.ext_stopwords) { this.ExtraDictConfig.ext_stopwords = ExtraDictConfig.ext_stopwords;}
+
     this.loadMainDict(opts.MainDictPath);
-    
+
     this.loadSurnameDict(opts.SurnameDictPath);
     this.loadQuantifierDict(opts.QuantifierDictPath);
     this.loadSuffixDict(opts.SuffixDictPath);
     this.loadPrepDict(opts.PrepDictPath);
     this.loadStopWordDict(opts.StopWordDictPath);
-    
+
     // todo 缓存字典
     //fs.writeFileSync('./dict/main.dic.json', JSON.stringify(this._MainDict, null, '\t'));
   },
@@ -37,7 +37,7 @@ var Dictionary = {
     var file = fs.readFileSync(filepath, {encoding: 'utf8'});
     file = file.replace(/ |\r/g, '');
     file = file.split('\n');
-    
+
     var theWord;
     for(var i=0;i<file.length;i++){
       theWord = file[i];
@@ -62,9 +62,9 @@ var Dictionary = {
         this.fillSegment(this._MainDict, theWord);
       }
     }
-    
+
 		//加载配置的扩展词典
-		var extDictFiles  = this.config.ext_dict;
+		var extDictFiles  = this.ExtraDictConfig.ext_dict;
 		if (extDictFiles){
 		  for(var i=0;i<extDictFiles.length;i++){
 		    this.loadExtDict(extDictFiles[i]);
@@ -80,7 +80,7 @@ var Dictionary = {
     var file = fs.readFileSync(dictPath || PATH_DIC_SURNAME, {encoding: 'utf8'});
     file = file.replace(/ |\r/g, '');
     file = file.split('\n');
-    
+
     var theWord;
     for(var i=0;i<file.length;i++){
       theWord = file[i];
@@ -97,7 +97,7 @@ var Dictionary = {
     var file = fs.readFileSync(dictPath || PATH_DIC_QUANTIFIER, {encoding: 'utf8'});
     file = file.replace(/ |\r/g, '');
     file = file.split('\n');
-    
+
     var theWord;
     for(var i=0;i<file.length;i++){
       theWord = file[i];
@@ -114,7 +114,7 @@ var Dictionary = {
     var file = fs.readFileSync(dictPath || PATH_DIC_SUFFIX, {encoding: 'utf8'});
     file = file.replace(/ |\r/g, '');
     file = file.split('\n');
-    
+
     var theWord;
     for(var i=0;i<file.length;i++){
       theWord = file[i];
@@ -131,7 +131,7 @@ var Dictionary = {
     var file = fs.readFileSync(dictPath || PATH_DIC_PREP, {encoding: 'utf8'});
     file = file.replace(/ |\r/g, '');
     file = file.split('\n');
-    
+
     var theWord;
     for(var i=0;i<file.length;i++){
       theWord = file[i];
@@ -148,7 +148,7 @@ var Dictionary = {
     var file = fs.readFileSync(dictPath || PATH_DIC_STOP, {encoding: 'utf8'});
     file = file.replace(/ |\r/g, '');
     file = file.split('\n');
-    
+
     var theWord;
     for(var i=0;i<file.length;i++){
       theWord = file[i];
@@ -156,9 +156,9 @@ var Dictionary = {
         this.fillSegment(this._StopWords, theWord);
       }
     }
-    
+
     //加载配置的扩展词典
-		var extStopDictFiles  = this.config.ext_stopwords;
+		var extStopDictFiles  = this.ExtraDictConfig.ext_stopwords;
 		if (extStopDictFiles){
 		  for(var i=0;i<extStopDictFiles.length;i++){
 		    this.loadExtStopWordDict(extStopDictFiles[i]);
@@ -171,7 +171,7 @@ var Dictionary = {
     var file = fs.readFileSync(filepath, {encoding: 'utf8'});
     file = file.replace(/ |\r/g, '');
     file = file.split('\n');
-    
+
     var theWord;
     for(var i=0;i<file.length;i++){
       theWord = file[i];
@@ -217,18 +217,18 @@ var Dictionary = {
 		var ds = matchedHit.matchedDictSegment;
 		return this.matchInDictSegment(ds, charArray, currentIndex, 1 , matchedHit);
 	},
-	isStopWord: function(charArray, begin, len){			
+	isStopWord: function(charArray, begin, len){
 		return HitService.isMatch(this.matchInDictSegment(this._StopWords, charArray, begin, len));
 	},
 	fillSegment: function(dictSeg, charArray, begin, len, enabled){
     begin = begin || 0;
     len = len || charArray.length;
     if (enabled !== 0) { enabled = 1; }
-    
+
     //获取字典表中的汉字对象
   	var beginChar = charArray[begin];
   	var keyChar = beginChar;// = dictSeg.charMap[beginChar];
-  
+
   	//字典中没有该字，则将其添加入字典
   	//if(!dictSeg.charMap[beginChar]){
   	//if (!dictSeg.childrenMap[beginChar]){
@@ -236,7 +236,7 @@ var Dictionary = {
   		//dictSeg.childrenMap[beginChar] = {};
   		//keyChar = beginChar;
   	//}
-  
+
   	//搜索当前节点的存储，查询对应keyChar的keyChar，如果没有则创建
   	var ds = Dictionary.lookforSegment(dictSeg, keyChar, enabled);
   	if (ds){
@@ -265,11 +265,11 @@ var Dictionary = {
   	}
   	//设置hit的当前处理位置
   	searchHit.end = begin;
-  
+
     var keyChar = charArray[begin];
   	//在map中查找
   	var ds = dictSeg.childrenMap[keyChar];
-  
+
   	//STEP2 找到DictSegment，判断词的匹配状态，是否继续递归，还是返回结果
   	if (ds){
   		if (len > 1){
@@ -304,7 +304,7 @@ var Dictionary = {
   		//当前节点存储segment数目+1
   		dictSeg.storeSize += 1;
   	}
-  
+
   	return ds;
   }
 
