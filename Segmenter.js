@@ -25,7 +25,7 @@ Segmenter.prototype.init = function(){
 };
 
 /**
- * initialize the dictionaries and 初始化词典，加载子分词器实现
+ * initialize the dictionaries and load the subordinate segmenters 初始化词典，加载子分词器实现
  * @return List<ISegmenter>
  */
 Segmenter.prototype.loadSegmenters = function(){
@@ -91,7 +91,7 @@ Segmenter.prototype.analyze = function(input){
 	this.arbitrator.process(this.context);
 
 	//output the segmentation result to the RESULT closure ,
-  //then start handling the uncut CJK characters. 将分词结果输出到结果集，并处理未切分的单个CJK字符
+  //then start handling the uncut single RareChinese/Japanese/Korean (CJK) characters. 将分词结果输出到结果集，并处理未切分的单个CJK字符
 	var result = this.context.outputToResult();
 
   return result;
