@@ -24,6 +24,19 @@ Segmenter.prototype.init = function(){
 	this.arbitrator = new IKArbitrator();
 };
 
+Segmenter.prototype.reset = function(input) {
+	this.input = input;
+	this.context.reset();
+	this.context.fillBuffer(input);
+	var segmenter;
+	for (var i=0;i<this.segmenters.length;i++){
+	  segmenter = this.segmenters[i];
+	  if (segmenter){
+	    segmenter.reset();
+	  }
+	}
+};
+
 /**
  * initialize the dictionaries and load the subordinate segmenters 初始化词典，加载子分词器实现
  * @return List<ISegmenter>
@@ -87,7 +100,7 @@ Segmenter.prototype.analyze = function(input){
 		//push the pointer forward 向前移动指针
 		b = this.context.moveCursor();
   }
-	//handle the similar word closures 对分词进行歧义处理
+	//handle the similar word closure 对分词进行歧义处理
 	this.arbitrator.process(this.context);
 
 	//output the segmentation result to the RESULT closure ,
