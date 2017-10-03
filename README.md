@@ -27,7 +27,20 @@
 
 # Why a decent segmentation is important in Chinese context
 
-    One important feature of Chinese texts is that they are character-based, not word- based. Each Chinese character stands for one phonological syllable and in most cases represents a morpheme. The fact that Chinese writing does not mark word boundaries poses the unique question of word segmentation in Chinese computational linguistics (e.g. Sproat and Shih 1990, and Chert and Liu 1992). Since words are the linguistically significant basic elements that are entered in the lexicon and manipulated by grammar rules, no language processing can be done unless words, especially those compound words such as "中国人民银行"(which can be segmented into "中国/人民银行"(The People's Bank Of China), or "中国人民/银行"(Chinese folks and banks)) are identified.
+    According to our team's previous user report, almost every Yugur person uses
+    Chinese in their daily life. Thus, the majority of the users of Yugur.io relies on
+    the Chinese context to understand and make use of the online dictionary.
+
+    One important feature of Chinese texts is that they are character-based, not word-
+    based. Each Chinese character stands for one phonological syllable and in most
+    cases represents a morpheme. The fact that Chinese writing does not mark word
+    boundaries poses the unique question of word segmentation in Chinese computational
+    linguistics (e.g. Sproat and Shih 1990, and Chert and Liu 1992). Since words are
+    the linguistically significant basic elements that are entered in the lexicon and
+    manipulated by grammar rules, no language processing can be done unless words,
+    especially those compound words such as "中国人民银行"(which can be segmented into "
+    中国/人民银行"(The People's Bank Of China), or "中国人民/银行"(Chinese folks and
+    banks)) are identified.
 
     Example: Chinese text = ' 羽毛球拍卖完了';
              Correct segmentation = '羽毛球拍/卖完/了'
@@ -92,5 +105,7 @@ Default Dictionary location:  ./lib/dict，to activate a customised dic: // 全�
 
 # Reference
 
-    IKArbitrator.js & AnalyzeContext.js idea/algorithm from (open-sourced project) https://code.google.com/archive/p/ik-analyzer/source/default/source
-    Project artifact references GitHub open-sourced project from Wang, Li et al: https://github.com/newebug/node-analyzer
+    IKArbitrator.js & AnalyzeContext.js idea/algorithm from (open-sourced project)
+    https://code.google.com/archive/p/ik-analyzer/source/default/source
+    Project artifact references GitHub open-sourced project from Wang, Li et al:
+    https://github.com/newebug/node-analyzer
